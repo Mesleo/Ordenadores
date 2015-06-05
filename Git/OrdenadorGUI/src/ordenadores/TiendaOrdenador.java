@@ -5,6 +5,7 @@ package ordenadores;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Queremos modelar una tienda de ordenadores en Java. Nos limitaremos a las
@@ -33,36 +34,20 @@ public class TiendaOrdenador implements Serializable{
 	 */
 	private ArrayList<Ordenador> almacen = new ArrayList<Ordenador>();
 	
+	private Ordenador ordenador;
+	
 	/**
 	 * Nombre del almacen
 	 */
 	private final String nombre = "Informática Benítez";
 
-	/**
-	 * Añade un coche al almacen
-	 * 
-	 * @param numSerie
-	 *            Representa la matrícula del ordenador a añadir
-	 * @param pantalla
-	 *            Representa la pantalla del ordenador a añadir
-	 * @param modelo
-	 *            Representa el modelo del ordenador a añadir
-	 * @return true si el ordenador se añade, false en otro caso (el ordenador es null o
-	 *         el ordenador ya está contenido en el almacen)
-	 */
-	/**
-	 * @param formatoFecha
-	 * @param numSerie
-	 * @param pantalla
-	 * @param modelo
-	 * @return
-	 */
-	public boolean annadirOrdenador(String numSerie, Pantalla pantalla, boolean ratonteclado, MarcasSobremesa marca,  ModelosSobremesa modelo) {
-		Ordenador sobremesa = Sobremesa.instanciarSobremesa(numSerie, pantalla, ratonteclado, marca, modelo);
-		if (sobremesa == null || almacen.contains(sobremesa))
+	
+	public boolean annadirOrdenador(Ordenador ordenador) {
+		if (ordenador == null || almacen.contains(ordenador))
 			return false;
-		return almacen.add(sobremesa);
+		return almacen.add(ordenador);
 	}
+
 
 	/**
 	 * Elimina un ordenador del almacen
@@ -72,8 +57,9 @@ public class TiendaOrdenador implements Serializable{
 	 * @return true si el ordenador se elimina, false en otro caso (el ordenador no está
 	 *         en el almacen)
 	 */
-	public boolean eliminar(String numSerie) {
-		return almacen.remove(Sobremesa.instanciarOrdenador(numSerie));
+	public boolean eliminar(Ordenador ordenador) {
+//		Ordenador ordenador2 = ordenador;
+		return almacen.remove(ordenador);
 	}
 
 	/**
@@ -88,12 +74,12 @@ public class TiendaOrdenador implements Serializable{
 	/**
 	 * Devuelve el ordenador indicado por el número de serie
 	 * 
-	 * @param numSerie
+	 * @param string
 	 *            Representa el número de serie a buscar
 	 * @return Ordenador contenido en el almacen. null si no existe
 	 */
-	public Ordenador get(String numSerie) {
-		Ordenador ordendador = Sobremesa.instanciarOrdenador(numSerie);
+	public Ordenador get(Ordenador ordenador) {
+		Ordenador ordendador = ordenador;
 		int index = almacen.indexOf(ordendador);
 		if (index != -1) {
 			return (Ordenador) almacen.get(index);
@@ -130,16 +116,11 @@ public class TiendaOrdenador implements Serializable{
 	public ArrayList<Ordenador> getOrdenadoresFecha(String fechaCompra) {
 		ArrayList<Ordenador> arrOrdenadoresFecha = new ArrayList<Ordenador>();
 		for (Ordenador ordenador : almacen) {
-			System.out.println("Ordenador: " + ordenador);
-			System.out.println("Antes del if. Array: " + arrOrdenadoresFecha);
-			if(ordenador.getFechaActual() == fechaCompra){
+			if(ordenador.getFechaCompra() == fechaCompra){
 				arrOrdenadoresFecha.add(ordenador);
-				System.out.println("En el if. Array: " + arrOrdenadoresFecha);
 			}	
 		}
-		System.out.println("Despues del foreach. Array: " + arrOrdenadoresFecha);
 		return arrOrdenadoresFecha;
 	}
-
 
 }

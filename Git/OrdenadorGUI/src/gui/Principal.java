@@ -2,16 +2,12 @@ package gui;
 
 import java.awt.Component;
 import java.awt.EventQueue;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
-import javax.swing.WindowConstants;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import ficheros.Fichero;
 import java.awt.event.KeyEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.ActionListener;
@@ -19,11 +15,21 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Set;
 import java.awt.Color;
+
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
+
+import ordenadores.Componentes;
+import ordenadores.MarcasOrdenador;
+import ordenadores.ModelosOrdenador;
+import ordenadores.Pantalla;
+import ordenadores.Portatil;
+import ordenadores.PropioPC;
+import ordenadores.Sobremesa;
 import ordenadores.TiendaOrdenador;
+import ordenadores.TipoOrdenador;
+
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -43,11 +49,14 @@ public class Principal {
 	private JMenu mnAyuda;
 	protected static TiendaOrdenador almacen = new TiendaOrdenador();
 	private Mostrar mostrar;
-	private ElegirColor elegirColor;
-	private MostrarPorFecha mostrarporfecha;
+	private Fecha fecha;
+	private MostrarPorNumeroDeSerieSobremesa mostrarpornumserie;
 	private About about;
 	private Ayuda ayuda;
 	private TotalOrdenadores tc;
+	boolean ventanaabierta;
+	private MostrarPorNumeroDeSerieComponentes mostrarpornumseriepropiopc;
+	private MostrarPorNumeroDeSeriePortatil mostrarpornumserieportatil;
 	protected static final Component parent = null;
 	protected static File file = new File("SinTitulo.obj");
 	private final static String message = "Error, no se ha podido hacer la operación con el archivo";
@@ -63,7 +72,6 @@ public class Principal {
 					Principal window = new Principal();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
-					e.printStackTrace();
 					JOptionPane.showMessageDialog(null, message);
 				}
 			}
@@ -101,7 +109,7 @@ public class Principal {
 		frame.getContentPane().setForeground(Color.WHITE);
 		frame.setResizable(false);
 		frame.setTitle(file.getName());
-		frame.setIconImage(new ImageIcon("src/imagenes/car.png").getImage()); 
+		frame.setIconImage(new ImageIcon("imagenes/pc.png").getImage()); 
 		
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -121,10 +129,8 @@ public class Principal {
 					frame.setTitle(file.getName());
 				} catch (FileNotFoundException e) {
 					JOptionPane.showMessageDialog(null, message);
-					e.printStackTrace();
 				} catch (IOException e) {
 					JOptionPane.showMessageDialog(null, message);
-					e.printStackTrace();
 				}
 			}
 		});
@@ -163,10 +169,8 @@ public class Principal {
 					Generar.guardar();
 				} catch (FileNotFoundException e) {
 					JOptionPane.showMessageDialog(null, message);
-					e.printStackTrace();
 				} catch (IOException e) {
 					JOptionPane.showMessageDialog(null, message);
-					e.printStackTrace();
 				}
 			}
 		});
@@ -183,17 +187,18 @@ public class Principal {
 					Generar.guardarComo();
 				} catch (FileNotFoundException e) {
 					JOptionPane.showMessageDialog(null, message);
-					e.printStackTrace();
 				} catch (IOException e) {
 					JOptionPane.showMessageDialog(null, message);
-					e.printStackTrace();
 				}
 			}
 		}
 	);
+		
+		
 		mnArchivo.add(mntmGuardarComo);
 		
 		mnArchivo.addSeparator();
+		
 		
 		JMenuItem mntmSalir = new JMenuItem("Salir");
 		mntmSalir.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, InputEvent.ALT_MASK));
@@ -203,10 +208,8 @@ public class Principal {
 					Generar.salir();
 				} catch (FileNotFoundException e) {
 					JOptionPane.showMessageDialog(null, message);
-					e.printStackTrace();
 				} catch (IOException e) {
 					JOptionPane.showMessageDialog(null, message);
-					e.printStackTrace();
 				}
 			}
 		});
@@ -214,35 +217,39 @@ public class Principal {
 		
 		mnOrdenador = new JMenu("Tienda ordenadores");
 		menuBar.add(mnOrdenador);
+	
 		
-		JMenuItem mntmAlta = new JMenuItem("Comprar ordenador");
-		mntmAlta.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Generar.alta(almacen);
+		JMenu mnComprar = new JMenu("Comprar ordenador");
+		mnOrdenador.add(mnComprar);
+		
+		JMenuItem mntmSobremesa = new JMenuItem("Sobremesa");
+		mntmSobremesa.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.ALT_MASK));
+		mntmSobremesa.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Generar.annadirSobremesa(almacen);
 			}
 		});
-		mntmAlta.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.ALT_MASK));
-		mnOrdenador.add(mntmAlta);
+		mnComprar.add(mntmSobremesa);
 		
-		JMenuItem mntmBaja = new JMenuItem("Vender ordenador");
-		mntmBaja.addActionListener(new ActionListener() {
+		JMenuItem mntmPortatil = new JMenuItem("Portatil");
+		mntmPortatil.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.ALT_MASK));
+		mntmPortatil.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Generar.baja(almacen);
+				Generar.annadirPortatil(almacen);
 			}
 		});
-		mntmBaja.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.ALT_MASK));
-		mnOrdenador.add(mntmBaja);
+		mnComprar.add(mntmPortatil);
 		
 		mnOrdenador.addSeparator();
 		
-		JMenuItem mntmMostrarConcesionario = new JMenuItem("Mostrar almac\u00E9n");
-		mntmMostrarConcesionario.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.ALT_MASK));
-		mntmMostrarConcesionario.addActionListener(new ActionListener() {
+		JMenuItem mntmMostrarAlmacen = new JMenuItem("Mostrar almac\u00E9n");
+		mntmMostrarAlmacen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.ALT_MASK));
+		mntmMostrarAlmacen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				mostrar();
 			}
 		});
-		mnOrdenador.add(mntmMostrarConcesionario);
+		mnOrdenador.add(mntmMostrarAlmacen);
 		
 		JMenuItem mntmMostrarTotalCoches = new JMenuItem("Total ordenadores");
 		mntmMostrarTotalCoches.addActionListener(new ActionListener() {
@@ -256,22 +263,43 @@ public class Principal {
 		mnBuscar = new JMenu("Buscar");
 		menuBar.add(mnBuscar);
 		
-		JMenuItem mntmCochePorMatricula = new JMenuItem("Por n\u00FAmero de serie...");
-		mntmCochePorMatricula.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.ALT_GRAPH_MASK));
-		mntmCochePorMatricula.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				mostrarPorMatricula();
-			}
-		});
-		mnBuscar.add(mntmCochePorMatricula);
-		
 		JMenuItem mntmCochePorColor = new JMenuItem("Por fecha de compra...");
 		mntmCochePorColor.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.ALT_GRAPH_MASK));
 		mntmCochePorColor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				mostrarPorColor();
+				mostrarPorFecha();
 			}
 		});
+		
+		JMenu mnPorNmeroDe = new JMenu("Por n\u00FAmero de serie");
+		mnBuscar.add(mnPorNmeroDe);
+		
+		JMenu mnSobremesa = new JMenu("Sobremesa");
+		mnPorNmeroDe.add(mnSobremesa);
+		
+		JMenuItem mntmDeSerie = new JMenuItem("De serie");
+		mntmDeSerie.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				mostrarPorNumSerieSobremesa();
+			}
+		});
+		mnSobremesa.add(mntmDeSerie);
+		
+		JMenuItem mntmPorComponentes = new JMenuItem("Por componentes");
+		mntmPorComponentes.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				mostrarPorNumSeriePropioPC();
+			}
+		});
+		mnSobremesa.add(mntmPorComponentes);
+		
+		JMenuItem mntmPortatil_1 = new JMenuItem("Portatil");
+		mntmPortatil_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				mostrarPorNumSeriePortatil();
+			}
+		});
+		mnPorNmeroDe.add(mntmPortatil_1);
 		mnBuscar.add(mntmCochePorColor);
 		
 		mnAyuda = new JMenu("Ayuda");
@@ -280,8 +308,8 @@ public class Principal {
 		JMenuItem mntmAyuda = new JMenuItem("Ayuda");
 		mntmAyuda.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				ayuda = new Ayuda();
-				ayuda.setVisible(true);
+				comprobarVentanaAbierta();
+				
 			}
 		});
 		mntmAyuda.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK));
@@ -298,56 +326,80 @@ public class Principal {
 		mnAyuda.add(mntmSobreConcesionario);
 		frame.getContentPane().setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(Principal.class.getResource("")));
-		lblNewLabel.setBounds(10, 86, 230, 153);
-		frame.getContentPane().add(lblNewLabel);
-		
-		JLabel lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setIcon(new ImageIcon(Principal.class.getResource("")));
-		lblNewLabel_1.setBounds(195, 0, 249, 130);
-		frame.getContentPane().add(lblNewLabel_1);
+		JLabel lblFondo = new JLabel();
+		lblFondo.setIcon(new ImageIcon(Principal.class.getResource("/imagenes/fondoPrincipal.png")));
+		lblFondo.setBounds(0, 0, 444, 251);
+		frame.getContentPane().add(lblFondo);
 		
 	}
 
-	
+	protected void comprobarVentanaAbierta() {
+		if (!ventanaabierta){
+			ayuda = new Ayuda();
+			ayuda.setVisible(true);
+			ventanaabierta = true;
+			return;
+		}
+		else if (ventanaabierta = true){
+			ayuda.setVisible(true);
+			return;
+		}
+	}
+
 	private void mostrar() {
 		if (almacen.size() == 0) {
-			JOptionPane.showMessageDialog(frame.getContentPane(),
-					"No hay coches en el concesionario.", "Error",
-					JOptionPane.ERROR_MESSAGE);
+			almacenVacio();
 		}else{
 			mostrar = new Mostrar(almacen);
 			mostrar.setVisible(true);
 		}
 	}
 
-	private void mostrarPorColor() {
+	private void almacenVacio() {
+		JOptionPane.showMessageDialog(frame.getContentPane(),
+				"No hay ordenadores en el almacén.", "Error",
+				JOptionPane.ERROR_MESSAGE);
+	}
+
+	private void mostrarPorFecha() {
 		if (almacen.size() == 0) {
-			JOptionPane.showMessageDialog(frame.getContentPane(),
-					"No hay coches en el concesionario.", "Error",
-					JOptionPane.ERROR_MESSAGE);
+			almacenVacio();
 			return;
 		}
-		elegirColor = new ElegirColor(almacen);
-		elegirColor.setVisible(true);
+		fecha = new Fecha(almacen);
+		fecha.setVisible(true);
 	}
 	
-	private void mostrarPorMatricula() {
+	private void mostrarPorNumSerieSobremesa() {
 		if (almacen.size() == 0) {
-			JOptionPane.showMessageDialog(frame.getContentPane(),
-					"No hay coches en el concesionario.", "Error",
-					JOptionPane.ERROR_MESSAGE);
+			almacenVacio();
 			return;
 		}
-		mostrarporfecha = new MostrarPorFecha(almacen);
-		mostrarporfecha.setVisible(true);
+		mostrarpornumserie = new MostrarPorNumeroDeSerieSobremesa(almacen);
+		mostrarpornumserie.setVisible(true);
+	}
+	
+	private void mostrarPorNumSeriePropioPC() {
+		if (almacen.size() == 0) {
+			almacenVacio();
+			return;
+		}
+		mostrarpornumseriepropiopc = new MostrarPorNumeroDeSerieComponentes(almacen);
+		mostrarpornumseriepropiopc.setVisible(true);		
+	}
+
+	private void mostrarPorNumSeriePortatil() {
+		if (almacen.size() == 0) {
+			almacenVacio();
+			return;
+		}
+		mostrarpornumserieportatil = new MostrarPorNumeroDeSeriePortatil(almacen);
+		mostrarpornumserieportatil.setVisible(true);		
 	}
 	
 	private void mostarTotal() {
 		tc = new TotalOrdenadores(almacen);
 		tc.setVisible(true);
 	}
-
 }
 		

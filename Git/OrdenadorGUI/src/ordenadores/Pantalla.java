@@ -21,7 +21,7 @@ public enum Pantalla {
 	/**
 	 * Representa el tamaño 15
 	 */
-	QUINCE("15 pulgadasS", 99.00f), 
+	QUINCE("15 pulgadas", 99.00f), 
 	
 	/**
 	 * Representa el tamaño 21

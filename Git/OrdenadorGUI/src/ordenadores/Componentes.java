@@ -1,127 +1,147 @@
 package ordenadores;
 
+import java.util.ArrayList;
+
 public enum Componentes {
 
 	/**
 	 * Representa la placa base ASUS
 	 */
-	ASUS(ModelosSobremesa.PLACABASE, 85.50f),
+	ASUS(CrearPropioOrdenador.PLACABASE, (85.50f)),
 	
 	/**
 	 * Representa la placa base ASROCK
 	 */
-	ASROCK(ModelosSobremesa.PLACABASE, 111.50f),
+	ASROCK(CrearPropioOrdenador.PLACABASE, (111.50f)),
 	
 	/**
 	 * Representa la placa base MSI
 	 */
-	MSI(ModelosSobremesa.PLACABASE, 182.87f),
+	MSI(CrearPropioOrdenador.PLACABASE, (182.87f)),
 	
 	/**
 	 * Representa el procesador AMDFM2
 	 */
-	AMDFM2(ModelosSobremesa.PROCESADOR, 45.50f),
+	AMDFM2(CrearPropioOrdenador.PROCESADOR, (45.50f)),
 	
 	/**
 	 * Representa el procesador AM3
 	 */
-	AM3(ModelosSobremesa.PROCESADOR, 67.20f),
+	AM3(CrearPropioOrdenador.PROCESADOR, (67.20f)),
 	
 	/**
 	 * Representa el procesador INTELI5
 	 */
-	INTELI5(ModelosSobremesa.PROCESADOR, 182.00f),
+	INTELI5(CrearPropioOrdenador.PROCESADOR, (182.00f)),
 
 	/**
 	 * Representa el procesador INTELI7
 	 */
-	INTELI7(ModelosSobremesa.PROCESADOR, 252.99f),
+	INTELI7(CrearPropioOrdenador.PROCESADOR, (252.99f)),
 	
 	/**
 	 * Representa la memoria RAM de 4GB
 	 */
-	CUATROGB(ModelosSobremesa.RAM, 60.50f),
+	CUATROGB(CrearPropioOrdenador.RAM, (60.50f)),
 	
 	/**
 	 * Representa la memoria RAM de 8GB
 	 */
-	OCHOGB(ModelosSobremesa.RAM, 95.20f),
+	OCHOGB(CrearPropioOrdenador.RAM, (95.20f)),
 	
 	/**
 	 * Representa la memoria RAM de 16GB
 	 */
-	DIECISEISGB(ModelosSobremesa.RAM, 220.00f),
+	DIECISEISGB(CrearPropioOrdenador.RAM, (220.00f)),
 	
 	/**
 	 * Representa el disco duro de 500GB
 	 */
-	QUINIENTOSGB(ModelosSobremesa.RAM, 40.50f),
+	QUINIENTOSGB(CrearPropioOrdenador.DISCODURO, (40.50f)),
 	
 	/**
 	 * Representa el disco duro de 1TB
 	 */
-	UNTB(ModelosSobremesa.RAM, 62.20f),
+	UNTB(CrearPropioOrdenador.DISCODURO, (62.20f)),
 	
 	/**
 	 * Representa el disco duro de 2TB
 	 */
-	DOSTB(ModelosSobremesa.RAM, 115.00f),
+	DOSTB(CrearPropioOrdenador.DISCODURO, (115.00f)),
 	
 	/**
 	 * Representa la tarjeta gráfica de 1GB
 	 */
-	UNGB(ModelosSobremesa.RAM, 40.50f),
+	UNGB(CrearPropioOrdenador.TARJETAGRAFICA, (40.50f)),
 	
 	/**
 	 * Representa la tarjeta gráfica de 2GB
 	 */
-	DOSGB(ModelosSobremesa.RAM, 62.20f),
+	DOSGB(CrearPropioOrdenador.TARJETAGRAFICA, (62.20f)),
 	
 	/**
 	 * Representa la tarjeta gráfica de 1GB
 	 */
-	CUATROCIENTOSVATIOS(ModelosSobremesa.RAM, 30.50f),
+	CUATROCIENTOS(CrearPropioOrdenador.FUENTEALIMENTACION, (30.50f)),
 	
 	/**
 	 * Representa la tarjeta gráfica de 2GB
 	 */
-	QUINIENTOSVATIOS(ModelosSobremesa.RAM, 41.20f),
+	QUINIENTOS(CrearPropioOrdenador.FUENTEALIMENTACION, (41.20f)),
 	
 	/**
 	 * Representa la tarjeta gráfica de 2GB
 	 */
-	SEISCIENTOSVATIOS(ModelosSobremesa.RAM, 50.20f);
+	SEISCIENTOS(CrearPropioOrdenador.FUENTEALIMENTACION, (50.20f));
 	
 	
 	
 	/**
 	 * Modelo de sobremesa
 	 */
-	private ModelosSobremesa modelosobremesa;
+	private CrearPropioOrdenador propio;
 	
 	/**
 	 * Precio en decimal que se aplicará a cada componente que se añada
 	 */
 	private float precio;
 	
-	Componentes(ModelosSobremesa modelo, float precio){
-		this.setModelosobremesa(modelo);
+	private MarcasOrdenador marca;
+	
+	Componentes(CrearPropioOrdenador propio, float precio){
+		this.setPropioOrdenador(propio);
+		this.precio = precio;
+	}
+	
+
+	public static Object[] getArray(CrearPropioOrdenador pieza){
+		ArrayList<Componentes> arrayList = new ArrayList<Componentes>();
+		for (Componentes componente : values()) {
+			if(componente.propio == pieza) 
+				arrayList.add(componente);
+		}
+		return arrayList.toArray();
 	}
 
-	public ModelosSobremesa getModelosobremesa() {
-		return modelosobremesa;
+	public CrearPropioOrdenador getPropio() {
+		return propio;
 	}
 
-	public void setModelosobremesa(ModelosSobremesa modelosobremesa) {
-		this.modelosobremesa = modelosobremesa;
+	public void setPropioOrdenador(CrearPropioOrdenador propio) {
+		this.propio = propio;
 	}
 
 	public float getPrecio() {
 		return precio;
 	}
 
-	public void setPrecio(float precio) {
-		this.precio = precio;
+	public MarcasOrdenador getMarca() {
+		return marca;
+	}
+
+
+	public void setMarca(MarcasOrdenador marca) {
+		this.marca = marca;
 	}
 	
 }

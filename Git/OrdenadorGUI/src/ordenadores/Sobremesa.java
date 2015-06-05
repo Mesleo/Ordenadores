@@ -1,106 +1,77 @@
 package ordenadores;
 
-public class Sobremesa extends Ordenador {
-
-
+public class Sobremesa extends Ordenador implements Precio {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
 	 * Booleano de raton teclado, está a false de inicio
 	 */
 	private boolean raton_teclado;
-	
-	/**
-	 * Marca de ordenadores sobremesa
-	 */
-	private MarcasSobremesa marcasobremesa;
 
 	/**
-	 * Modelo de ordenadores sobremesa
+	 * Marca de ordenador
 	 */
-	private ModelosSobremesa modelo;
-	
-	/**
-	 * Modelo de ordenadores sobremesa
-	 */
+	private MarcasOrdenador marca;
 
 	/**
-	 * Contructor con sólo el argumento número de serie
+	 * Modelo de ordenador
+	 */
+	private ModelosOrdenador modelo;
+
+	/**
+	 * Constructor de Ordenador de Sobremesa
+	 * 
+	 * @param tipo
 	 * @param numSerie
-	 * 				Parámetro unívoco e identificador de cada Sobremesa
+	 * @param pantalla
+	 * @param marca
+	 * @param modelo
+	 * @param rt
 	 */
-	Sobremesa(String numSerie){
+	public Sobremesa(TipoOrdenador tipo, String numSerie, Pantalla pantalla,
+			float precio, MarcasOrdenador marca, ModelosOrdenador modelo,
+			boolean rt) {
+		super(tipo, numSerie, pantalla, precio);
+		this.precio = calcularPrecio();
+		this.marca = marca;
+		this.modelo = modelo;
+		setRaton_teclado(rt);
+	}
+
+	public Sobremesa(String numSerie) {
 		super(numSerie);
 	}
 
-	Sobremesa(String numSerie, Pantalla pantalla, boolean rt, MarcasSobremesa marcassobremesa, ModelosSobremesa modelo){
-		super(numSerie, pantalla);
-		this.raton_teclado = rt;
-		this.marcasobremesa = marcassobremesa;
-		this.modelo = modelo;
-	}
 
-	public static Sobremesa instanciarSobremesa(String numSerie,
-			Pantalla pantalla, boolean rt, MarcasSobremesa marcassobremesa, ModelosSobremesa modelo) {
-		try{
-			if (esValido(numSerie) && pantalla != null && marcassobremesa != null && modelo != null)
-				return new Sobremesa(numSerie, pantalla, rt, marcassobremesa, modelo);
-		}catch(Exception e){
-			System.out.println("No se ha podido instanciar");
-			e.printStackTrace();
-		}
+	public static Ordenador instanciarOrdenador(TipoOrdenador tipo, String numSerie,
+			Pantalla pantalla, float precio, MarcasOrdenador marca,
+			ModelosOrdenador modelo, boolean rt) {
+		if (esValido(numSerie))
+			return (Ordenador)new Sobremesa(tipo, numSerie, pantalla, precio,
+					marca, modelo, rt);
 		return null;
 	}
-	
-
-	public static Sobremesa instanciarOrdenador(String numSerie) {
-		try{
-			if (esValido(numSerie))
-				return new Sobremesa(numSerie);
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	/**
-	 * @return the raton_teclado
-	 */
-	public boolean isRaton_teclado() {
-		return raton_teclado;
-	}
-
-
-	/**
-	 * @param raton_teclado the raton_teclado to set
-	 */
-	public void setRaton_teclado(boolean raton_teclado) {
-		this.raton_teclado = raton_teclado;
-	}
-
 
 	/**
 	 * @return the marcasobremesa
 	 */
-	public MarcasSobremesa getMarcasobremesa() {
-		return marcasobremesa;
+	public MarcasOrdenador getMarca() {
+		return marca;
 	}
-
 
 	/**
-	 * @param marcasobremesa the marcasobremesa to set
+	 * @param marca
+	 *            the marcasobremesa to set
 	 */
-	public void setMarcasobremesa(MarcasSobremesa marcasobremesa) {
-		this.marcasobremesa = marcasobremesa;
+	public void setMarca(MarcasOrdenador marca) {
+		this.marca = marca;
 	}
-	
 
-
-	public ModelosSobremesa getModelo() {
+	public ModelosOrdenador getModelo() {
 		return modelo;
 	}
 
@@ -110,32 +81,50 @@ public class Sobremesa extends Ordenador {
 	 * @param modelo
 	 *            Representa el nuevo modelo del coche
 	 */
-	private void setModelo(ModelosSobremesa modelo) {
+	public void setModelo(ModelosOrdenador modelo) {
 		this.modelo = modelo;
 	}
-
 	
 	/**
-	 * Método abstracto que hereda de la clase padre Ordenador
-	 * 
+	 * @return the raton_teclado
 	 */
-	@Override
-	public float calcularPrecio() {
-		return 0;
-		
+	public boolean isRaton_teclado() {
+		return raton_teclado;
 	}
-	
 
-	/* (non-Javadoc)
+	public void setRaton_teclado(boolean raton_teclado) {
+		this.raton_teclado = raton_teclado;
+	}
+
+	/**
+	 * 
+	 * @param raton_teclado
+	 * @return precio del ratón y teclado
+	 */
+	public float precioRatonTeclado(boolean raton_teclado) {
+		if (raton_teclado == false)
+			return 0;
+		return 40f;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "Sobremesa:\t\n\tFecha compra: " + fechaActual
-				+ "\n\tNúmero de serie: " + numSerie
-				+ "\n\tPantalla: " + pantalla
-				+ "\n\tTiene ratón y teclado: " + raton_teclado
-				+ "\n\tMarca: " + marcasobremesa
-				+ "\n\tModelo: " + modelo;
+		return "\nSobremesa:\t\n\tFecha compra: " + fechaCompra
+				+ "\n\tNúmero de serie: " + numSerie + "\n\tPantalla: "
+				+ pantalla + "\n\tMarca: " + marca + "\n\tModelo: " + modelo
+				+ "\n\tRatón y teclado: " + raton_teclado;
 	}
+
+	@Override
+	public float calcularPrecio() {
+		precio = precioPantalla(pantalla) + precioModelo(modelo)
+				+ precioRatonTeclado(raton_teclado);
+		return (float) (Math.rint(precio*1000)/1000);
+	}
+
 }

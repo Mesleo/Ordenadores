@@ -46,7 +46,6 @@ public class Fichero implements Serializable {
 						new BufferedOutputStream(new FileOutputStream(file, false)))){
 					oos.writeObject(almacen);
 		        } catch (IOException ex) {
-		        	ex.printStackTrace();
 		        }
 			}else{
 				try (ObjectOutputStream oos = new ObjectOutputStream(

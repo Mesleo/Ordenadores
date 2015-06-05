@@ -14,6 +14,8 @@ import java.awt.event.ActionEvent;
  */
 public class Eliminar extends VentanaPrincipal {
 
+	private Mostrar mostrar;
+	
 	/**
 	 * 
 	 */
@@ -33,18 +35,17 @@ public class Eliminar extends VentanaPrincipal {
 		buttonAnterior.setVisible(false);
 		buttonSiguiente.setVisible(false);
 		
-		radioButtonPlata.setEnabled(false);
-		radioButtonRojo.setEnabled(false);
-		radioButtonAzul.setEnabled(false);
+	
 		
 		comboBoxMarca.setEnabled(false);
 		comboBoxModelo.setEnabled(false);
 		
 		eliminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Ordenador ordenador = almacen.get(textField.getText());
+				Sobremesa ordenador = (Sobremesa)almacen.get(new Sobremesa(textField.getText()));
+				Portatil portatil = (Portatil)almacen.get(new Portatil(textField.getText()));
+				PropioPC propio = (PropioPC)almacen.get(new PropioPC(textField.getText()));
 				if (ordenador != null) {
-					mostrarCoche(ordenador);
 					int n = JOptionPane.showOptionDialog(contentPanel,
 							"¿Está seguro de que desea eliminarlo?", "Confirmar",
 							JOptionPane.YES_NO_CANCEL_OPTION,
@@ -52,7 +53,8 @@ public class Eliminar extends VentanaPrincipal {
 					
 					switch (n) {
 					case JOptionPane.YES_OPTION:
-						almacen.eliminar(textField.getText());
+						almacen.eliminar(ordenador);
+						JOptionPane.showMessageDialog(null, "Se ha eliminado correctamente");
 						clear();
 						Generar.setModificado(true);
 						break;
@@ -69,26 +71,9 @@ public class Eliminar extends VentanaPrincipal {
 	
 	private void clear() {
 		textField.setText("");
-		buttonGroup.clearSelection();
+		grupoTecladoRaton.clearSelection();
 		comboBoxMarca.setSelectedItem(null);
 		comboBoxModelo.setSelectedItem(null);	
-	}
-
-	private void mostrarCoche(Ordenador ordenador) {
-//		switch (ordenador.getPantalla()) {
-//		case PLATA:
-//			radioButtonPlata.setSelected(true);
-//			break;
-//		case ROJO:
-//			radioButtonRojo.setSelected(true);
-//			break;
-//		case AZUL:
-//			radioButtonAzul.setSelected(true);
-//		}
-//		comboBoxMarca.addItem(ordenador.getModelo().getMarca());
-//		comboBoxMarca.setSelectedItem(ordenador.getModelo().getMarca());
-//		comboBoxModelo.addItem(ordenador.getModelo());
-//		comboBoxModelo.setSelectedItem(ordenador.getModelo());
 	}
 
 }

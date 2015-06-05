@@ -10,6 +10,7 @@ package ordenadores;
  * Importa el paquete utiles.*
  */
 import utiles.*;
+import ordenadores.*;
 
 
 /**
@@ -31,6 +32,7 @@ public class TestOrdenadores{
 			"Mostrar tienda", "Mostrar total de ordenadores", 
 			"Ordenadores por fecha de compra", "Salir" });
 	
+	
 	/*
 	 * Menú Pantallas
 	 */
@@ -41,19 +43,20 @@ public class TestOrdenadores{
 	 * Menú Pantallas
 	 */
 	private static Menu menuMarcas = new Menu("MENU MARCAS",
-			MarcasSobremesa.generarOpcionesMenu());
+			MarcasOrdenador.generarOpcionesMenu());
 	
 	
 	/*
 	 * Menú Modelos Sobremesa
 	 */
 	private static Menu menuModelos = new Menu("MENU MARCAS SOBREMESA", 
-			ModelosSobremesa.generarOpcionesMenu());
+			ModelosOrdenador.generarOpcionesMenu());
 	
 	/*
 	 * Objeto concesionario de la clase Concesionario
 	 */
 	static TiendaOrdenador almacenOrdenador = new TiendaOrdenador();
+	
 
 	/**
 	 * @param args
@@ -61,146 +64,50 @@ public class TestOrdenadores{
 	 */
 	public static void main(String[] args){
 		
-		/**
-		 * Bucle do while que muestra continuamente las opciones del menú
-		 */
-		do {
-			/**
-			 * Estructura switch con las diferentes opciones del menú
-			 */
-			switch (menu.gestionar()) {
-			
-			/*
-			 * Comprar ordenador
-			 */
-			case 1:
-				comprarOrdenador();
-				break;
-			
-			/*
-			 * Vender ordenador
-			 */
-			case 2:
-				venderOrdenador();
-				break;
-			
-			/*
-			 * Obtener ordenador
-			 */
-			case 3:
-				getOrdenador();
-				break;
-			
-			/*
-			 * Mostrar tienda
-			 */
-			case 4:
-				System.out.println(almacenOrdenador);
-				break;
-				
-			/*
-			 * Muestra total de ordenadores en la tienda
-			 */
-			case 5:
-				System.out.println("Hay " + almacenOrdenador.size() + " ordenador/es en el almacén");
-				break;
-				
-			/*
-			 * Ordenadores por fecha
-			 */
-			case 6:// Mostrar Ordenadores por fecha
-				System.out.println(almacenOrdenador.getOrdenadoresFecha(Teclado.leerCadena("Dime la fecha")));
-				break;
+		//Probando a añadir distintos elementos con el mismo número de serie
 
-			/*
-			 * Cualquier otro número sale del bucle
-			 */
-			default:
-				System.out.println("Adios");
-				return;
-			}
-		} while (true);
+		Ordenador sobremesa = new Sobremesa(TipoOrdenador.SOBREMESA, "0000A",
+				Pantalla.ONCE, 480, MarcasOrdenador.ASUS, ModelosOrdenador.CM6870, true);
+		Ordenador sobremesa2 = new Sobremesa(TipoOrdenador.SOBREMESA, "0000A",
+				Pantalla.ONCE, 480, MarcasOrdenador.ASUS, ModelosOrdenador.CM6870, true);
+		System.out.println("Método de la interfaz Precio de la clase Sobremesa: "
+				+ sobremesa.precio);
+		Ordenador portatil = new Portatil(TipoOrdenador.PORTATIL, "B0000",
+				Pantalla.VEINTISIETE, 150, MarcasOrdenador.APPLE_PORTATIL, ModelosOrdenador.CM6870, true, false);
+		System.out.println("Método de la interfaz Precio de la clase Portátil: "
+				+ portatil.precio);
+		
+		Ordenador portatil2 = new Portatil(TipoOrdenador.PORTATIL, "0000A",
+				Pantalla.VEINTISIETE, 150, MarcasOrdenador.APPLE_PORTATIL, ModelosOrdenador.CM6870, true, false);
+		
+		
+		//Añadidos
+		System.out.println("Almacen con añadidos");
+		System.out.println("S1");almacenOrdenador.annadirOrdenador(sobremesa);
+		System.out.println("S2");almacenOrdenador.annadirOrdenador(sobremesa2);
+		System.out.println("P1");almacenOrdenador.annadirOrdenador(portatil);
+		System.out.println("P2");almacenOrdenador.annadirOrdenador(portatil2);
+		System.out.println("P1.2");almacenOrdenador.annadirOrdenador(portatil);
+		Ordenador pc = sobremesa;
+		System.out.println(almacenOrdenador.toString());
+		//Eliminados
+		System.out.println("Almcen con eliminados");
+		almacenOrdenador.eliminar(pc);
+		System.out.println(almacenOrdenador.toString());
+		
+		Ordenador s = (Ordenador)sobremesa;
+		System.out.println("Transformado a clase padre: " + s);
+		Ordenador s2 = (Ordenador)portatil2;
+		System.out.println("Transformado a clase padre: " + s2);
+		System.out.println("Igual igual: " + (s.numSerie == s2.numSerie));
+		System.out.println("Equals con atributo: " + (s.numSerie.equals(s2.numSerie)));
+		System.out.println("Equals: " + (s.equals(s2)));
+		System.out.println("Contains: " + almacenOrdenador.equals(s));
+		System.out.println("Contains: " + almacenOrdenador.equals(s2));
+		System.out.println("Redondeo: " + redondear(2.6668742, 4));
 	}
-
-	/**
-	 * Obtener ordenador
-	 */
-	private static void getOrdenador() {
-		Ordenador ordenador;
-		try{
-			ordenador = almacenOrdenador.get(Teclado.leerCadena("Introduce el número de serie"));
-			System.out.println(ordenador);	
-		}catch(Exception e){
-			System.out.println(e.getMessage() + " El ordenador no se puede mostrar.");
-		}			
-	}
-
-	/**
-	 * Eliminar ordenador
-	 */
-	private static void venderOrdenador(){
-		if (almacenOrdenador
-				.eliminar(Teclado.leerCadena("Dime el número de serie")))
-			System.out.println("Se ha eliminado correctamente");
-		else
-			System.out.println("No se ha podido eliminar");
-	}
-
-	/**
-	 * Añadir un ordenador
-	 */
-	private static void comprarOrdenador(){
-		if (almacenOrdenador.annadirOrdenador(Teclado.leerCadena("Dime el número de serie"), pedirPantalla(), pedirRatonTeclado(), pedirMarca(), pedirModelo()))
-			System.out.println("Ordenador añadido con éxito"); 
-		else
-			System.out.println("No se ha podido añadir"); 
-	}
-
-
-	/**
-	 * Pide marca para el ordenador
-	 * @return la marca escogida
-	 */
-	private static MarcasSobremesa pedirMarca() {
-		int opcion = menuMarcas.gestionar();
-		MarcasSobremesa[] arrMarcas = MarcasSobremesa.getValues();
-		if (opcion == arrMarcas.length + 1)
-			return null;
-		return arrMarcas [opcion - 1];
-	}
-
-	/**
-	 * Pide modelo
-	 * 
-	 * @return
-	 * 		Opción de Modelo escogida
-	 */
-	private static ModelosSobremesa pedirModelo() {
-		int opcion = menuModelos.gestionar();
-		ModelosSobremesa[] arrModelos = ModelosSobremesa.getValues();
-		if (opcion == arrModelos.length + 1)
-			return null;
-		return arrModelos[opcion - 1];
-	}
-
-	/**
-	 * Pide pantalla
-	 * 
-	 * @return
-	 * 		Opción de Pantalla recogida
-	 */
-	private static Pantalla pedirPantalla() {
-		int opcion = menuPantallas.gestionar();
-		Pantalla[] arrPantallas = Pantalla.getValues();
-		if (opcion == arrPantallas.length + 1)
-			return null;
-		return arrPantallas[opcion - 1];
-	}
-
-	private static boolean pedirRatonTeclado() {
-		String opcion = Teclado.leerCadena("¿Quieres ratón y teclado?");
-		if (opcion == "SI")
-			return true;
-		return false;
-	}
+	
+	 public static double redondear( double numero, int decimales ) {
+		    return Math.round(numero*Math.pow(10,decimales))/Math.pow(10,decimales);
+		  }
 }

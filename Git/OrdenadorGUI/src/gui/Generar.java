@@ -17,7 +17,7 @@ import java.io.IOException;
 
 public class Generar extends Principal{
 
-	private static Annadir alta;
+	private static AnnadirSobremesa alta;
 	private static Eliminar baja;
 	private static boolean modificado = false;
 	private static boolean guardado = true;
@@ -193,15 +193,20 @@ public class Generar extends Principal{
 			System.exit(0);
 	}
 	
-	static void alta(TiendaOrdenador almacen) {
-		alta = new Annadir(almacen);
+	static void annadirSobremesa(TiendaOrdenador almacen) {
+		alta = new AnnadirSobremesa(almacen);
+		alta.setVisible(true);
+	}
+	
+	static void annadirPortatil(TiendaOrdenador almacen) {
+		AnnadirPortatil alta = new AnnadirPortatil(almacen);
 		alta.setVisible(true);
 	}
 	
 	static void baja(TiendaOrdenador almacen) {
 		if (almacen.size() == 0) {
 			JOptionPane.showMessageDialog(frame.getContentPane(),
-					"No hay coches en el concesionario.", "Error",
+					"No hay ordenadores en el almacén.", "Error",
 					JOptionPane.ERROR_MESSAGE);
 			return;
 		}

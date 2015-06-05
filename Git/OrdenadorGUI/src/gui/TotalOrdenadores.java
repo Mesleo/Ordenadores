@@ -24,7 +24,6 @@ public class TotalOrdenadores extends VentanaPrincipal {
 	 * @param almacen 
 	 */
 	public TotalOrdenadores(TiendaOrdenador almacen) {
-//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(200, 180, 451, 145);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -47,9 +46,9 @@ public class TotalOrdenadores extends VentanaPrincipal {
 		String total = String.valueOf(i);
 		textField.setText(total);
 		
-		JLabel lblCochesEnEl = new JLabel("coche/s en el concesionario");
+		JLabel lblCochesEnEl = new JLabel("ordenador/es en el almacen");
 		lblCochesEnEl.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		lblCochesEnEl.setBounds(187, 33, 166, 27);
+		lblCochesEnEl.setBounds(187, 33, 193, 27);
 		contentPane.add(lblCochesEnEl);
 	}
 }
